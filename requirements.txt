@@ -1,0 +1,6 @@
+torch
+segmentation_models_pytorch
+albumentations
+opencv-python
+geopandas
+shapely
