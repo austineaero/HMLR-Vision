@@ -20,8 +20,8 @@ class SingleImageDataset(Dataset):
         # Generate a two-channel mask: [background, red-pixels]
         if pseudo_mask:
             hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
-            m1 = cv2.inRange(hsv, (0,70,50), (10,255,255))     # lower red range
-            m2 = cv2.inRange(hsv, (170,70,50), (180,255,255))  # upper red range
+            m1 = cv2.inRange(hsv, (0,30,50), (10,255,255))     # lower red range
+            m2 = cv2.inRange(hsv, (160,30,50), (180,255,255))  # upper red range
             red = (m1 | m2).astype(np.uint8)
             self.mask = np.stack([1 - red, red], axis=-1)
         else:
