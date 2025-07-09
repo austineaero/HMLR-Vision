@@ -1,6 +1,11 @@
 torch
-segmentation_models_pytorch
+segmentation-models-pytorch
 albumentations
 opencv-python
 geopandas
 shapely
+easyocr
+Pillow
+pytesseract
+numpy==1.23.5
+matplotlib==3.7.2
