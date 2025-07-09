@@ -48,8 +48,6 @@ class SingleImageDataset(Dataset):
 TRAIN_TRANSFORM = Compose([
     Resize(512, 512),
     HorizontalFlip(p=0.5),
-    RandomRotate90(p=0.5),
-    ColorJitter(p=0.5),
     Normalize(),
     ToTensorV2()
 ])
