@@ -38,6 +38,7 @@ data/
 output/
   ├─ training_loss.png     # Training loss plot (see Results)
   ├─ result.png            # Inference result (see Results)
+  ├─ segments.gpkg         # Geopackage result
 src/
   ├─ data_loader.py        # Data loading utilities for U-Net
   ├─ unet_model.py         # U-Net model build/train/inference functions
