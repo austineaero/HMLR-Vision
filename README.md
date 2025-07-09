@@ -133,7 +133,6 @@ Run [`03_inference_export.ipynb`](03_inference_export.ipynb):
 
 | Step                | Example Output                             |
 | ------------------- | ------------------------------------------ |
-| Input image         | ![Input](data/stockton_1.png)              |
 | Training mask       | ![Mask](output/GT_mask.png)                |
 | Training loss curve | ![Training Loss](output/training_loss.png) |
 | Inference result    | ![Result](output/result.png)               |
