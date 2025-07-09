@@ -144,9 +144,12 @@ Run [`03_inference_export.ipynb`](03_inference_export.ipynb):
 * Shows consistent convergence, indicating successful learning even from a single, well-labelled image.
 * Indicates that the model is learning to distinguish red boundary/text from background.
 
+### Performance Summary
+The U-Net model, even with a single annotated map, effectively segments the main red boundaries and text regions when combined with HSV filtering and targeted OCR. While some very fine text or faded lines may be under-segmented, the approach minimises false positives and aligns well with manual labels, as shown in the “Inference result”. The training loss plot demonstrates consistent improvement and no sign of overfitting.
+
 ---
 
-## Limitations & Challenges
+## Challenges & Mitigations
 
 | Challenge                           | Approach/Mitigation                                                           |
 | ----------------------------------- | ----------------------------------------------------------------------------- |
