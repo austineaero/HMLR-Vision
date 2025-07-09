@@ -12,30 +12,39 @@ def build_unet(encoder="resnet18", classes=3, in_channels=3, pretrained=True):
         classes=classes
     )
 
-def train_unet(model, dataloader, device, epochs=30, lr=1e-4, save_path=None):
-    """Train U-Net with CrossEntropyLoss."""
+def train_unet(model, dataloader, device, epochs=5, lr=1e-4, save_path=None):
+    """Train U-Net with CrossEntropyLoss and return epoch loss history."""
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    model = model.to(device)
+    model = model.to(device).train()
+    epoch_losses = []
+
     for epoch in range(1, epochs + 1):
-        model.train()
-        epoch_loss = 0
+        running_loss = 0.0
+        num_batches = 0
+        
         for imgs, masks in dataloader:
             imgs = imgs.to(device)
-            masks = masks.to(device)
+            masks = masks.to(device).squeeze(1).long()
             preds = model(imgs)
             loss = criterion(preds, masks)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            epoch_loss += loss.item()
-        avg_loss = epoch_loss / len(dataloader)
+            running_loss += loss.item()
+            num_batches += 1
+
+        avg_loss = running_loss / num_batches
+        epoch_losses.append(avg_loss)
         print(f"Epoch {epoch}/{epochs}, Loss: {avg_loss:.4f}")
+
     if save_path:
+        import os
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         torch.save(model.state_dict(), save_path)
         print(f"Model weights saved ➜ {save_path}")
-    return model
+    
+    return model, epoch_losses
 
 def infer_masks(model, loader, device, thresh=0.5):
     """Run inference and return boundary and text masks."""
