@@ -11,7 +11,7 @@
 * [Instructions (How to Run)](#instructions-how-to-run)
 * [Technical Approach](#technical-approach)
 * [Results & Performance](#results--performance)
-* [Limitations & Challenges](#limitations--challenges)
+* [Challenges & Mitigations](#challenges--mitigations)
 * [Next Steps](#next-steps)
 * [Credits](#credits)
 
