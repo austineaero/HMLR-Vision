@@ -67,3 +67,38 @@ def load_unet(weights_path, encoder="resnet18", classes=3, in_channels=3, device
     state = torch.load(weights_path, map_location=device)
     model.load_state_dict(state)
     return model.to(device).eval()
+
+# ----Evaluation helpers----
+
+def _fast_hist(pred, gt, num_classes):
+    """Confusion-matrix helper for IoU."""
+    mask = (gt >= 0) & (gt < num_classes)
+    hist = np.bincount(
+        num_classes * gt[mask].astype(int) + pred[mask].astype(int),
+        minlength=num_classes ** 2,
+    ).reshape(num_classes, num_classes)
+    return hist
+
+def evaluate_unet(model, loader, device, num_classes=3):
+    """
+    Evaluate pixel accuracy & per-class IoU on a loader.
+    Returns: acc (float), iou_per_class (list)  length == num_classes
+    """
+    model.eval()
+    hist = np.zeros((num_classes, num_classes), dtype=np.int64)
+
+    with torch.no_grad():
+        for imgs, masks in loader:
+            imgs   = imgs.to(device)
+            gt     = masks.squeeze(1).cpu().numpy()[0]        # [H,W]
+            logits = model(imgs)
+            pred   = torch.argmax(logits, dim=1).cpu().numpy()[0]  # [H,W]
+
+            hist += _fast_hist(pred, gt, num_classes)
+
+    acc = np.diag(hist).sum() / hist.sum()
+    iou = []
+    for i in range(num_classes):
+        union = hist[i].sum() + hist[:, i].sum() - hist[i, i]
+        iou.append(hist[i, i] / union if union > 0 else 0.0)
+    return acc, iou
